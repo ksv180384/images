@@ -1,0 +1,360 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Галерея",
+        "description": "API для работы с галереей",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:7031/api/v1",
+            "description": "Локальный сервер"
+        },
+        {
+            "url": "http://test.ru/api/v1",
+            "description": "Локальный сервер"
+        }
+    ],
+    "paths": {
+        "/admin/categories": {
+            "get": {
+                "summary": "Получаем категории",
+                "operationId": "5637d7aab52aaee44e703cfa4795dc26",
+                "responses": {
+                    "200": {
+                        "description": "Получаем категории",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "categories": {
+                                                    "description": "Массив категорий",
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/AdminCategoryResource"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "admin/category/store": {
+            "post": {
+                "summary": "Добавляем категорию",
+                "description": "Создание новой категории с указанием названия, описания и URL",
+                "operationId": "9f99e495bb8a603b13e83b2595e064c6",
+                "requestBody": {
+                    "description": "Данные для создания категории",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AdminCreateCategoryRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Категория успешно создана",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AdminCategoryResource"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Ошибка валидации"
+                    }
+                }
+            }
+        },
+        "/admin/category/{categoryId}/images": {
+            "get": {
+                "summary": "Получаем изображения категории",
+                "operationId": "4ea331e729edfa67d8d1f6bdea419eab",
+                "parameters": [
+                    {
+                        "name": "categoryId",
+                        "in": "path",
+                        "description": "ID категории",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ImageResource"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Error message"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/categories": {
+            "get": {
+                "summary": "Получаем категории",
+                "operationId": "e93ceaadb552efa4a95c10a887411fe8",
+                "responses": {
+                    "200": {
+                        "description": "Получаем категории",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "categories": {
+                                                    "description": "Массив категорий",
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/AppCategoryResource"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "AdminCreateCategoryRequest": {
+                "required": [
+                    "title",
+                    "description",
+                    "url"
+                ],
+                "properties": {
+                    "title": {
+                        "description": "Название категории",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Электроника"
+                    },
+                    "description": {
+                        "description": "Описание категории",
+                        "type": "string",
+                        "example": "Категория электронных товаров"
+                    },
+                    "url": {
+                        "description": "URL-адрес категории",
+                        "type": "string",
+                        "format": "uri",
+                        "maxLength": 500,
+                        "example": "https://example.com/category/electronics"
+                    }
+                },
+                "type": "object"
+            },
+            "AdminCategoryCollection": {
+                "title": "CategoryCollection",
+                "description": "Список категорий",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AdminCategoryResource"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "AdminCategoryResource": {
+                "properties": {
+                    "id": {
+                        "type": "number",
+                        "example": "1"
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "Название категории"
+                    },
+                    "url": {
+                        "type": "string",
+                        "example": "https://i.pinimg.com/originals/19/89/44/198944ea9f57d70ea850fc868efbd4b6.jpg"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Описание категории"
+                    }
+                },
+                "type": "object"
+            },
+            "ImageResource": {
+                "title": "Image Resource",
+                "description": "Image resource representation",
+                "properties": {
+                    "id": {
+                        "description": "Идентификатор изображения",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "category_id": {
+                        "description": "Идентификатор категории",
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "image": {
+                        "description": "путь к изображению",
+                        "type": "string",
+                        "example": "path/image.jpg"
+                    },
+                    "image_preview": {
+                        "description": "путь к превью изображения",
+                        "type": "string",
+                        "example": "path/image.jpg"
+                    },
+                    "title": {
+                        "description": "Название изображения",
+                        "type": "string",
+                        "example": "Название изображения"
+                    },
+                    "description": {
+                        "description": "Описание изображения",
+                        "type": "string",
+                        "example": "Описание изображения"
+                    },
+                    "image_created_at": {
+                        "description": "Дата когда было сделано фото",
+                        "type": "string",
+                        "example": "2022-07-11"
+                    },
+                    "width": {
+                        "description": "Ширина изображения",
+                        "type": "string",
+                        "example": "1024"
+                    },
+                    "height": {
+                        "description": "высота изображения",
+                        "type": "string",
+                        "example": "1024"
+                    },
+                    "path_full": {
+                        "description": "Полный путь до изображения",
+                        "type": "string",
+                        "example": "https://site.ru/path/image.jpg"
+                    },
+                    "path_preview_full": {
+                        "description": "Полный путь к превью изображения",
+                        "type": "string",
+                        "example": "https://site.ru/path/image.jpg"
+                    },
+                    "path_face": {
+                        "description": "Ссылка на изображение с лицом",
+                        "type": "string",
+                        "example": "path/image.jpg"
+                    },
+                    "is_features": {
+                        "description": "Есть ли файл с фрагментами для поиска по изображениям",
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "created_at": {
+                        "description": "дата добавления",
+                        "type": "string",
+                        "example": "2022-07-11"
+                    },
+                    "updated_at": {
+                        "description": "дата обновления",
+                        "type": "string",
+                        "example": "2022-07-11"
+                    },
+                    "tags": {
+                        "description": "теги изображения",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "id": {
+                                    "type": "integer"
+                                },
+                                "title": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "example": [
+                            {
+                                "id": 1,
+                                "title": "tag1"
+                            },
+                            {
+                                "id": 2,
+                                "title": "tag2"
+                            }
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "AppCategoryResource": {
+                "properties": {
+                    "id": {
+                        "type": "number",
+                        "example": "1"
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "Название категории"
+                    },
+                    "url": {
+                        "type": "string",
+                        "example": "https://i.pinimg.com/originals/19/89/44/198944ea9f57d70ea850fc868efbd4b6.jpg"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Описание категории"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": []
+}

@@ -1,0 +1,105 @@
+version: '3.9'
+
+networks:
+  imagines:
+
+services:
+  imagines-php:
+    build:
+      context: .
+      dockerfile: _docker/php.8.2.dockerfile
+    container_name: imagines_admin_php
+    working_dir: /var/www/imagines
+    volumes:
+      - ./backend:/var/www/imagines
+      - ./_docker/php/php.ini:/usr/local/etc/php/php.ini
+    networks:
+      - imagines
+
+  imagines-nginx:
+    image: nginx:alpine
+    container_name: imagines_admin_nginx
+    restart: unless-stopped
+    tty: true
+    working_dir: /var/www/imagines
+    ports:
+      - 7030:80
+    volumes:
+      - ./backend:/var/www/imagines
+      - ./_docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - imagines-php
+    networks:
+      - imagines
+
+  imagines-db:
+    image: mariadb:10.10
+    container_name: imagines_db
+    ports:
+      - 3310:3306
+    volumes:
+      - ./_docker/db/dbdata:/var/lib/mysql
+    command:
+      - --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_DATABASE: imagines
+      MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+    networks:
+      - imagines
+
+  imagines-phpmyadmin:
+    image: phpmyadmin:latest
+    links:
+      - imagines-db:imagines-db
+    restart: always
+    ports:
+      - 7032:80
+    environment:
+      PMA_HOST: imagines-db
+    networks:
+      - imagines
+
+  imagines-node:
+    container_name: imagines_node
+    build:
+      context: .
+      dockerfile: _docker/node.dockerfile
+    # tty: true
+    volumes:
+      - ./frontend:/imagines
+    ports:
+        - 7031:3010
+    networks:
+      - imagines
+
+  imagines-node2:
+    container_name: imagines_node2
+    build:
+      context: .
+      dockerfile: _docker/node2.dockerfile
+    # tty: true
+    volumes:
+      - ./frontend2:/imagines
+    ports:
+      - 7033:3010
+    networks:
+      - imagines
+
+  imagines-python:
+    build:
+      context: .
+      dockerfile: _docker/python.dockerfile
+    volumes:
+      - ./detected_face_python/src/:/app/
+      - ./backend/storage/app/public:/app/img
+    ports:
+      - 8001:8001
+    # command: python main.py
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8001 --insecure"
+    # devices:
+    #   - /dev/video0:/dev/video0
+    networks:
+      - imagines
