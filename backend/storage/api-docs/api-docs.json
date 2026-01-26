@@ -135,21 +135,28 @@
                 "operationId": "e93ceaadb552efa4a95c10a887411fe8",
                 "responses": {
                     "200": {
-                        "description": "Получаем категории",
+                        "description": "Успешный ответ со списком категорий",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/AppCategoryResource"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Ошибка валидации",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "categories": {
-                                                    "description": "Массив категорий",
-                                                    "type": "array",
-                                                    "items": {
-                                                        "$ref": "#/components/schemas/AppCategoryResource"
-                                                    }
-                                                }
-                                            },
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "errors": {
                                             "type": "object"
                                         }
                                     },

@@ -7,8 +7,8 @@ Route::get('/', [\App\Http\Controllers\Api\V1\IndexController::class, 'index']);
 
 Route::group(['middleware' => 'auth'], function(){
     // Категории
-    Route::get('categories', [\App\Http\Controllers\Api\V1\Admin\Category\CategoryController::class, 'index']);
-    Route::get('category/edit/{id}', [\App\Http\Controllers\Api\V1\Admin\Category\CategoryController::class, 'edit']);
+    Route::get('categories', [\App\Http\Controllers\Api\V1\App\Category\CategoryController::class, 'index']);
+    Route::get('category/edit/{id}', [\App\Http\Controllers\Api\V1\App\Category\CategoryController::class, 'edit']);
 
     // Теги
     Route::get('/tags', [\App\Http\Controllers\Api\V1\Admin\Category\ImageTagController::class, 'tagsPage']);

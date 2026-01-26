@@ -1,12 +1,38 @@
 <script setup lang="ts">
 
+import { ref, onMounted } from 'vue';
 import { getCategoriesList } from '@/pages/categories/api';
+import CategoriesCard from '@/pages/categories/ui/CategoriesCard.vue';
 
-getCategoriesList();
+import type { Ref } from 'vue';
+import type { Category } from '@/pages/categories/api';
+
+const categories: Ref<Array<Category>> = ref([]);
+
+const loadCategories  = async (): Promise<void> => {
+  categories.value = await getCategoriesList();
+}
+
+onMounted(() => {
+  loadCategories();
+});
+
 </script>
 
 <template>
-  <h1>categories</h1>
+  <div>
+    <h1>categories</h1>
+
+    <div class="flex flex-wrap gap-2 justify-center">
+      <template v-for="category in categories" :key="category.id">
+        <CategoriesCard
+          v-bind="category"
+        />
+      </template>
+    </div>
+
+
+  </div>
 </template>
 
 <style scoped>

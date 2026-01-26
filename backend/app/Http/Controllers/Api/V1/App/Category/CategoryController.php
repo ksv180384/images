@@ -23,24 +23,22 @@ class CategoryController extends Controller
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Получаем категории',
+                description: 'Успешный ответ со списком категорий',
+                content: new OA\JsonContent(
+                    type: 'array',
+                    items: new OA\Items(ref: '#/components/schemas/AppCategoryResource')
+                )
+            ),
+            new OA\Response(
+                response: 422,
+                description: 'Ошибка валидации',
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(
-                            property: 'data',
-                            type: 'object',
-                            properties: [
-                                new OA\Property(
-                                    property: 'categories',
-                                    type: 'array',
-                                    description: 'Массив категорий',
-                                    items: new OA\Items(ref: '#/components/schemas/AppCategoryResource')
-                                )
-                            ]
-                        )
-                    ],
+                        new OA\Property(property: 'message', type: 'string'),
+                        new OA\Property(property: 'errors', type: 'object')
+                    ]
                 )
-            )
+            ),
         ]
     )]
     public function index(CategoryService $categoryService): JsonResponse
@@ -48,11 +46,9 @@ class CategoryController extends Controller
         try {
             $categories = $categoryService->all();
 
-            return response()->json([
-                'data' => [
-                    'categories' => CategoryResource::collection($categories),
-                ]
-            ]);
+            return response()->json(
+                CategoryResource::collection($categories)
+            );
 
         } catch (\Exception $exception){
             throw ValidationException::withMessages(['message' => $exception->getMessage()]);
