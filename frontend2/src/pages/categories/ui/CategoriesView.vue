@@ -21,8 +21,6 @@ onMounted(() => {
 
 <template>
   <div>
-    <h1>categories</h1>
-
     <div class="flex flex-wrap gap-2 justify-center">
       <template v-for="category in categories" :key="category.id">
         <CategoriesCard
@@ -30,8 +28,6 @@ onMounted(() => {
         />
       </template>
     </div>
-
-
   </div>
 </template>
 

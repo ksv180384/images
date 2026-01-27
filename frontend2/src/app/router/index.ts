@@ -9,18 +9,18 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
-      path: '/',
-      component: () => DefaultLayout,
+      ...AUTH_SECTION_ROUTE,
+      component: AuthLayout,
+    },
+    {
+      path: '',
+      component: DefaultLayout,
       children: [
         HOME_ROUTE,
         CATEGORIES_ROUTE,
-        {
-          ...AUTH_SECTION_ROUTE,
-          component: AuthLayout,
-        },
-      ],
+      ]
     },
-  ],
+  ]
 })
 
 export default router;

@@ -2,7 +2,13 @@
 
 import { reactive } from 'vue';
 
-const menu = reactive([
+interface Link {
+  name: string,
+  label: string,
+  is_active: boolean
+}
+
+const menu = reactive<Array<Link>>([
   { name: 'home', label: 'Главная', is_active: true },
   { name: 'categories', label: 'Категории', is_active: false },
   { name: 'login', label: 'Теги', is_active: false },
@@ -14,10 +20,10 @@ const menu = reactive([
   <header>
     <nav class="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
       <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
-        <a href="https://flowbite.com" class="flex items-center">
+        <RouterLink :to="{ name: 'home' }" class="flex items-center">
           <img src="https://flowbite.com/docs/images/logo.svg" class="mr-3 h-6 sm:h-9" alt="Flowbite Logo" />
           <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white uppercase">img-hub</span>
-        </a>
+        </RouterLink>
         <div class="flex items-center lg:order-2">
           <router-link
             :to="{ name: 'login' }"
@@ -33,7 +39,7 @@ const menu = reactive([
         </div>
         <div class="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1" id="mobile-menu-2">
           <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
-            <template v-for="menuItem in menu">
+            <template v-for="menuItem in menu" :key="menuItem.name">
               <li>
                 <router-link
                   :to="{ name: menuItem.name }"

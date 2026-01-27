@@ -7,7 +7,7 @@ export const CATEGORIES_LINK = {
 } as const satisfies RouteLocationRaw;
 
 export const CATEGORIES_ROUTE = {
-  path: 'categories',
+  path: '/categories',
   name: CATEGORIES_LINK.name,
   component: () => import('@/pages/categories/ui')
 } as const satisfies RouteRecordRaw
