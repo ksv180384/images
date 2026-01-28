@@ -6,6 +6,8 @@ import { REGISTER_ROUTE } from '@/pages/auth/register';
 import { HOME_LINK } from '@/shared/config';
 import { login } from '@/pages/auth/login/api';
 
+import { useUserStore } from '@/entities/user';
+
 import type { FormInstance, FormRules } from 'element-plus';
 
 interface RuleForm {
@@ -14,6 +16,7 @@ interface RuleForm {
 }
 
 const router = useRouter();
+const userStore = useUserStore();
 const isSubmittingForm = ref(false);
 const refForm = ref<FormInstance>();
 const form = reactive<RuleForm>({
@@ -40,10 +43,16 @@ const submitForm = async (): Promise<void> => {
 
   isSubmittingForm.value = true;
 
-  const result = await login(form);
+  try {
+    const result = await login(form);
 
-  isSubmittingForm.value = false;
-  // router.push({ name: HOME_LINK.name });
+    router.push({ name: HOME_LINK.name });
+
+  } catch (e) {
+    console.error(e);
+  } finally {
+    isSubmittingForm.value = false;
+  }
 }
 </script>
 

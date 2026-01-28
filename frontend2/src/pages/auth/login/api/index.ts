@@ -1,5 +1,6 @@
-import { login } from '@/pages/auth/login/api/login.ts';
+import { login, logout } from '@/pages/auth/login/api/login.ts';
 
 export {
   login,
+  logout,
 };

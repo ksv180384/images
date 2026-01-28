@@ -16,3 +16,7 @@ export const login = async (payload: {
 
   return status === 204 && data !== null ? data : null;
 }
+
+export const logout = async (): Promise<void> => {
+  await http.fetchPost('logout');
+}
