@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Resources\Auth\CheckAuthUserResource;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -19,20 +20,20 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): Response
+    public function store(LoginRequest $request): JsonResponse
     {
         $request->authenticate();
 
         $request->session()->regenerate();
 
-        return response()->noContent();
+        return response()->json(Auth::check() ? CheckAuthUserResource::make(Auth::user()) : null);
     }
 
-    public function checkAuth()
+    public function checkAuth(): JsonResponse
     {
         return response()->json([
             'authenticated' => Auth::check(),
-            'user' => Auth::check() ? CheckAuthUserResource::make(Auth::user()) : null
+            'user' => Auth::check() ? CheckAuthUserResource::make(Auth::user()) : null,
         ]);
     }
 

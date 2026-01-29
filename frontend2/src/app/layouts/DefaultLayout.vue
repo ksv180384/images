@@ -24,7 +24,7 @@ const onLogout = async () => {
   try {
     await logout();
 
-    userStorage.setAuthUser(false);
+    userStorage.reset();
   } catch (e) {
 
   } finally {}
@@ -56,6 +56,9 @@ const onLogout = async () => {
               <template #dropdown>
                 <el-dropdown-menu>
                   <el-dropdown-item @click="onLogout">
+                    Имя
+                  </el-dropdown-item>
+                  <el-dropdown-item @click="onLogout" divided>
                     Выход
                   </el-dropdown-item>
                 </el-dropdown-menu>

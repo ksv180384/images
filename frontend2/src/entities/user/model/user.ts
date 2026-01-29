@@ -1,30 +1,28 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import { http } from '@/shared/api';
 
 import type { Ref } from 'vue';
 
-interface User {
+export interface User {
   id: string,
   email: string,
 }
 
 interface UserStore {
   isAuth: Ref<boolean>,
-  setUser: (userData: User) => void,
+  isCheck: Ref<boolean>,
+  user: Ref<User | null>,
+  setUser: (userData: User | null) => void,
   getUser: () => User | null
   setAuthUser: (value: boolean) => void
-  checkAuth: () => void
-}
-
-interface CheckAuthData {
-  authenticated: boolean,
-  user: User
+  setCheck: (value: boolean) => void
+  reset: () => void
 }
 
 export const useUserStore = defineStore('userUserStore', (): UserStore => {
 
   const isAuth: UserStore['isAuth'] = ref(false);
+  const isCheck: UserStore['isCheck'] = ref(false);
   const user: Ref<User | null> = ref(null);
 
   const setUser: UserStore['setUser'] = (userData) => {
@@ -39,19 +37,23 @@ export const useUserStore = defineStore('userUserStore', (): UserStore => {
     isAuth.value = value;
   }
 
-  const checkAuth: UserStore['checkAuth'] = async () => {
-    const { data, status } = await http.fetchGet<CheckAuthData>('check-auth');
-    if(data){
-      isAuth.value = data.authenticated;
-      user.value = data.user;
-    }
+  const reset: UserStore['reset'] = () => {
+    isAuth.value = false;
+    user.value = null;
+  }
+
+  const setCheck: UserStore['setCheck'] = (value) => {
+    isCheck.value = value;
   }
 
   return {
     isAuth,
+    isCheck,
+    user,
     setUser,
     getUser,
     setAuthUser,
-    checkAuth,
+    reset,
+    setCheck
   }
 });

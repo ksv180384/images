@@ -5,7 +5,6 @@ import { useRouter } from 'vue-router';
 import { REGISTER_ROUTE } from '@/pages/auth/register';
 import { HOME_LINK } from '@/shared/config';
 import { login } from '@/pages/auth/login/api';
-
 import { useUserStore } from '@/entities/user';
 
 import type { FormInstance, FormRules } from 'element-plus';
@@ -45,6 +44,10 @@ const submitForm = async (): Promise<void> => {
 
   try {
     const result = await login(form);
+
+    userStore.setCheck(true);
+    userStore.setUser(result);
+    userStore.setAuthUser(true);
 
     router.push({ name: HOME_LINK.name });
 

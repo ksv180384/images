@@ -1,22 +1,18 @@
 import { http } from '@/shared/api';
 
-interface LoginData {
-  user: {
-    role: string
-  },
-  token: string
-}
+import type { User } from '@/entities/user';
 
 export const login = async (payload: {
   email: string,
   password: string,
-}): Promise<LoginData | null> => {
+}): Promise<User | null> => {
 
-  const { data, status } = await http.fetchPost<LoginData>('login', payload);
+  const { data, status } = await http.fetchPost<User>('login', payload);
 
-  return status === 204 && data !== null ? data : null;
+  return status === 200 && data !== null ? data : null;
 }
 
-export const logout = async (): Promise<void> => {
-  await http.fetchPost('logout');
+export const logout = async (): Promise<User | null> => {
+  const result = await http.fetchPost<User>('logout');
+  return result.data;
 }

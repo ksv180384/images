@@ -1,4 +1,5 @@
 import axios from 'axios';
+import type { AxiosInstance } from 'axios';
 
 import type { AxiosRequestConfig } from 'axios';
 
@@ -13,6 +14,7 @@ interface HttpResponse<T> {
 }
 
 interface HttpClient {
+  instance: AxiosInstance,
   fetchData: <T>(config: AxiosRequestConfig) => Promise<T | null>,
   isSuccess: (config: AxiosRequestConfig) => Promise<boolean>,
   fetchFull: <T>(config: AxiosRequestConfig) => Promise<HttpResponse<T>>,
@@ -20,8 +22,6 @@ interface HttpClient {
   fetchGet: <T>(path: string, config?: AxiosRequestConfig) => Promise<HttpResponse<T>>;
   fetchDelete: <T>(path: string, config?: AxiosRequestConfig) => Promise<HttpResponse<T>>;
   fetchDeleteWithBody: <T>(path: string, data?: any, config?: AxiosRequestConfig) => Promise<HttpResponse<T>>;
-  setToken: (token: string) => void,
-  clearToken: () => void,
   getCsrfToken: () => Promise<void>,
   isCsrfInitialized: () => boolean,
 }
@@ -33,7 +33,6 @@ const httpClient = ({ baseUrl, defaultHeaders }: HttpConfig): HttpClient => {
     withCredentials: true,
   });
 
-  let bearerToken: string | null = null;
   let csrfInitialized = false;
 
   // Функция для получения CSRF токена
@@ -52,11 +51,6 @@ const httpClient = ({ baseUrl, defaultHeaders }: HttpConfig): HttpClient => {
   const request = async <T>(config: AxiosRequestConfig): Promise<HttpResponse<T>> => {
 
     const headers = { ...config.headers } as NonNullable<typeof config.headers>;
-
-    // Добавляем Bearer токен если есть
-    if(bearerToken !== null){
-      headers['Authorization'] = `Bearer ${bearerToken}`;
-    }
 
     try {
       const { data, status } = await axiosInstant.request<T>({
@@ -85,20 +79,6 @@ const httpClient = ({ baseUrl, defaultHeaders }: HttpConfig): HttpClient => {
       return { data: null, status: 500 };
     }
   }
-
-  // Перехватчик для автоматического получения CSRF токена при 419 ошибке
-  axiosInstant.interceptors.response.use(
-    response => response,
-    async error => {
-      if (error.response?.status === 419 && csrfInitialized) {
-        console.log('Interceptor: CSRF токен устарел, обновляем...');
-        await getCsrfToken();
-        // Повторяем оригинальный запрос
-        return axiosInstant(error.config);
-      }
-      return Promise.reject(error);
-    }
-  );
 
   const fetchData = async <T>(config: AxiosRequestConfig): Promise<T | null> => {
     const { data } = await request<T>(config);
@@ -190,19 +170,12 @@ const httpClient = ({ baseUrl, defaultHeaders }: HttpConfig): HttpClient => {
     });
   }
 
-  const setToken = (token: string): void => {
-    bearerToken = token;
-  }
-
-  const clearToken = (): void => {
-    bearerToken = null;
-  }
-
   const isCsrfInitialized = (): boolean => {
     return csrfInitialized;
   };
 
   return {
+    instance: axiosInstant,
     fetchData,
     isSuccess,
     fetchFull,
@@ -210,8 +183,6 @@ const httpClient = ({ baseUrl, defaultHeaders }: HttpConfig): HttpClient => {
     fetchPost,
     fetchDelete,
     fetchDeleteWithBody,
-    setToken,
-    clearToken,
     getCsrfToken,
     isCsrfInitialized,
   }

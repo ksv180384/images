@@ -25,13 +25,17 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from) => {
+
   const userStore = useUserStore();
 
-  const isAuthenticated = await userStore.checkAuth();
+  // Если пользовательакторизован, то не может перейти на страницу авторизации
+  if(userStore.isAuth && to.path.startsWith(AUTH_SECTION_ROUTE.path)){
+    return { name: HOME_ROUTE.name };
+  }
 
   // Проверяем аутентификацию при необходимости
   if (to.meta.requiresAuth) {
-    const isAuthenticated = await userStore.checkAuth()
+    // const isAuthenticated = await userStore.checkAuth();
     // if (!isAuthenticated) {
     //   return { name: 'login' }
     // }
