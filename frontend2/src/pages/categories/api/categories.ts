@@ -1,17 +1,12 @@
 import { http } from '@/shared/api';
 
+import type { Category } from '@/pages/categories/model';
+
 interface CategoryDTO {
   id: number,
   title: string,
   description: string | null,
   url: string
-}
-
-export interface Category {
-  id: number,
-  title: string,
-  desc: string | null,
-  preview_img: string
 }
 
 export const getCategoriesList = async (): Promise<Array<Category>> => {

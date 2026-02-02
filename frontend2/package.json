@@ -19,6 +19,7 @@
     "@tailwindcss/vite": "^4.1.18",
     "@vueuse/core": "^14.1.0",
     "@vueuse/integrations": "^14.1.0",
+    "@yeger/vue-masonry-wall": "^5.1.5",
     "axios": "^1.13.2",
     "element-plus": "^2.13.0",
     "pinia": "^3.0.4",

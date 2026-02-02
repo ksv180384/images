@@ -4,6 +4,7 @@ import { AuthLayout, DefaultLayout } from '@/app/layouts';
 import { AUTH_SECTION_ROUTE } from '@/pages/auth';
 import { HOME_ROUTE } from '@/pages/home';
 import { CATEGORIES_ROUTE } from '@/pages/categories';
+import { IMAGES_ROUTE } from '@/pages/images';
 import { useUserStore } from '@/entities/user';
 
 const router = createRouter({
@@ -19,6 +20,7 @@ const router = createRouter({
       children: [
         HOME_ROUTE,
         CATEGORIES_ROUTE,
+        IMAGES_ROUTE,
       ]
     },
   ]

@@ -20,13 +20,17 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
+  <div class="flex">
     <div class="flex flex-wrap gap-2 justify-center">
       <template v-for="category in categories" :key="category.id">
         <CategoriesCard
           v-bind="category"
         />
       </template>
+    </div>
+
+    <div class="w-[280px]">
+      фильтр
     </div>
   </div>
 </template>

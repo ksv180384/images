@@ -43,16 +43,10 @@ class ImageService extends Service
      */
     public function getByCategoryId(int $categoryId): Collection
     {
-        try {
-            $images = DB::transaction(function() use ($categoryId) {
-                $images = $this->model->where('category_id', $categoryId)->get();
 
-                return $images;
-            }, 3);
-        } catch (\Exception $exception) {
+        $imagesFilter = new ImagesFilter(request());
 
-            throw new \Exception('Ошибка при получении изображений.');
-        }
+        $images = $this->model->filter($imagesFilter)->where('category_id', $categoryId)->get();
 
         return $images;
     }

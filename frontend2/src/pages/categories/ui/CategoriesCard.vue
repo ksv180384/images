@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Category } from '../api';
+import type { Category } from '@/pages/categories/model';
 
 const props = defineProps<Category>();
 
@@ -9,7 +9,7 @@ const props = defineProps<Category>();
 <div class="w-[600px] flex gap-2 p-4 rounded-lg shadow-lg border border-gray-200">
   <div class="flex flex-col flex-1 gap-3">
     <div class="text-2xl">
-      <RouterLink to="/">
+      <RouterLink :to="{ name: 'category.images', params: { id: props.id } }">
         {{ props.title }}
       </RouterLink>
     </div>

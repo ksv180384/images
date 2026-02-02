@@ -90,7 +90,7 @@ const onLogout = async () => {
       </div>
     </nav>
   </header>
-  <div>
+  <div class="max-w-screen-xl mx-auto">
     <RouterView />
   </div>
 </div>
