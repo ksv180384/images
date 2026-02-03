@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Category } from '@/pages/categories/model';
+import type { Category } from '@/entities/category/model';
 
 const props = defineProps<Category>();
 
@@ -18,7 +18,7 @@ const props = defineProps<Category>();
   <img
     class="w-[200px] object-cover object-center rounded"
     :src="props.preview_img"
-    :alt="props.title"
+    :alt="props.title || ''"
   />
 </div>
 </template>

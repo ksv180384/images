@@ -1,5 +1,8 @@
 import axios from 'axios';
 import type { AxiosInstance } from 'axios';
+import { useRouter } from 'vue-router';
+import { useUserStore } from '@/entities/user';
+import { LOGIN_ROUTE } from '@/pages/auth/login';
 
 import type { AxiosRequestConfig } from 'axios';
 

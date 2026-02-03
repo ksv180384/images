@@ -5,7 +5,7 @@ import { getCategoriesList } from '@/pages/categories/api';
 import CategoriesCard from '@/pages/categories/ui/CategoriesCard.vue';
 
 import type { Ref } from 'vue';
-import type { Category } from '@/pages/categories/api';
+import type { Category } from '@/entities/category/model';
 
 const categories: Ref<Array<Category>> = ref([]);
 

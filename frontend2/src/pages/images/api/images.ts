@@ -1,30 +1,9 @@
 import { http } from '@/shared/api';
 
-import type { Image, Tag } from '@/pages/images/model';
+import type { Image, ImageDTO } from '@/entities/image/model';
+import type { Tag, TagDTO } from '@/entities/tag/model';
 
-interface TagDTO {
-  id: number,
-  title: string
-}
 
-interface ImageDTO {
-  id: number
-  category_id: number
-  image: string
-  image_preview: string
-  title: string | null
-  description: string | null
-  height: number
-  width: number
-  path_face: string | null
-  path_full: string
-  path_preview_full: string
-  tags: TagDTO[] | null
-  is_features: boolean
-  image_created_at: string | null
-  updated_at: string
-  created_at: string
-}
 
 export const getImagesList = async (categoryId: number): Promise<Array<Image>> => {
   const list = await http.fetchGet<Array<ImageDTO>>(`category/${categoryId}/images`);

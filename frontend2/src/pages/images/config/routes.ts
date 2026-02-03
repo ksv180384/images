@@ -9,5 +9,8 @@ export const IMAGES_LINK = {
 export const IMAGES_ROUTE = {
   path: '/categories/:id/images',
   name: IMAGES_LINK.name,
+  meta: {
+    requiresAuth: true,
+  },
   component: () => import('@/pages/images/ui')
 } as const satisfies RouteRecordRaw

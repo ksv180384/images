@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Image } from '@/pages/images/model';
+import type { Image } from '@/entities/image/model';
 
 const props = defineProps<Image>();
 
@@ -10,7 +10,7 @@ const props = defineProps<Image>();
     <img
       class="w-full h-auto object-cover"
       :src="props.path_preview_full"
-      :alt="props.title"
+      :alt="props.title || ''"
     />
   </div>
 </template>

@@ -6,7 +6,7 @@ import { getImagesList } from '@/pages/images/api';
 import ImageCard from '@/pages/images/ui/ImageCard.vue';
 
 import type { Ref } from 'vue';
-import type { Image } from '@/pages/images/model';
+import type { Image } from '@/entities/image/model';
 
 const route = useRoute();
 const images: Ref<Array<Image>> = ref([]);

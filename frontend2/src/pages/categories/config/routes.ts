@@ -9,5 +9,8 @@ export const CATEGORIES_LINK = {
 export const CATEGORIES_ROUTE = {
   path: '/categories',
   name: CATEGORIES_LINK.name,
+  meta: {
+    requiresAuth: true,
+  },
   component: () => import('@/pages/categories/ui')
 } as const satisfies RouteRecordRaw
