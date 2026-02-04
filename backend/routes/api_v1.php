@@ -11,7 +11,7 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('category/{id}/images', [\App\Http\Controllers\Api\V1\App\Image\ImageController::class, 'getImagesByCategoryId']);
 
     // Теги
-    Route::get('/tags', [\App\Http\Controllers\Api\V1\Admin\Category\ImageTagController::class, 'tagsPage']);
+    Route::get('/image-tags/all', [\App\Http\Controllers\Api\V1\App\ImageTag\ImageTagController::class, 'all']);
 });
 
 // Админка

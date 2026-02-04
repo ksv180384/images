@@ -1,7 +1,7 @@
 import { http } from '@/shared/api';
 
 import type { Image, ImageDTO } from '@/entities/image/model';
-import type { Tag, TagDTO } from '@/entities/tag/model';
+import type { ImageTag, ImageTagDTO } from '@/entities/image-tag/model';
 
 
 
@@ -11,7 +11,13 @@ export const getImagesList = async (categoryId: number): Promise<Array<Image>> =
   return list.data !== null ? list.data.map(item => imageMapDTO(item)) : [];
 }
 
-const tagMapDTO = (dto: TagDTO): Tag => {
+export const getImageTagsList = async (): Promise<Array<ImageTag>> => {
+  const list = await http.fetchGet<Array<ImageTagDTO>>(`image-tags/all`);
+
+  return list.data !== null ? list.data.map(item => imageMapDTO(item)) : [];
+}
+
+const imageTagMapDTO = (dto: ImageTagDTO): ImageTag => {
   return {
     id: dto.id,
     title: dto.title,
@@ -20,8 +26,8 @@ const tagMapDTO = (dto: TagDTO): Tag => {
 
 const imageMapDTO = (dto: ImageDTO): Image => {
 
-  const tagsList = dto.tags?.map((item: TagDTO) => {
-    return tagMapDTO(item);
+  const tagsList = dto.tags?.map((item: ImageTagDTO) => {
+    return imageTagMapDTO(item);
   }) ?? null;
 
   return {

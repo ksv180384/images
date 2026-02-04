@@ -167,6 +167,75 @@
                     }
                 }
             }
+        },
+        "/category/{categoryId}/images": {
+            "get": {
+                "summary": "Получаем изображения категории",
+                "operationId": "3782afeb599511c03281f3d79c5d28e0",
+                "parameters": [
+                    {
+                        "name": "categoryId",
+                        "in": "path",
+                        "description": "ID категории",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ImageResource"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Error message"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/image-tags/all": {
+            "get": {
+                "summary": "Получаем все тега изображения",
+                "operationId": "0277feb68c6bdee701a756c64f6f0f03",
+                "responses": {
+                    "200": {
+                        "description": "Успешный ответ со списком категорий",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/AppImageTagResource"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -357,6 +426,32 @@
                     "description": {
                         "type": "string",
                         "example": "Описание категории"
+                    }
+                },
+                "type": "object"
+            },
+            "AppImageTagResource": {
+                "properties": {
+                    "id": {
+                        "type": "number",
+                        "example": "1"
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "Название тега"
+                    }
+                },
+                "type": "object"
+            },
+            "AppCheckAuthUserResource.php": {
+                "properties": {
+                    "id": {
+                        "type": "number",
+                        "example": "1"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "email"
                     }
                 },
                 "type": "object"

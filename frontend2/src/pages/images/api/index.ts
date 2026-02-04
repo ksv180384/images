@@ -1,3 +1,3 @@
-import { getImagesList } from './images.ts';
+import { getImagesList, getImageTagsList } from './images.ts';
 
-export { getImagesList };
+export { getImagesList, getImageTagsList };

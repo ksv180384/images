@@ -1,4 +1,4 @@
-import type { Tag, TagDTO } from '@/entities/tag/model';
+import type { ImageTag, ImageTagDTO } from '@/entities/image-tag/model';
 
 export interface Image {
   id: number
@@ -12,7 +12,7 @@ export interface Image {
   path_face: string | null
   path_full: string
   path_preview_full: string
-  tags: Tag[] | null
+  tags: ImageTag[] | null
   is_features: boolean
   image_created_at: string | null
   updated_at: string
@@ -31,7 +31,7 @@ export interface ImageDTO {
   path_face: string | null
   path_full: string
   path_preview_full: string
-  tags: TagDTO[] | null
+  tags: ImageTagDTO[] | null
   is_features: boolean
   image_created_at: string | null
   updated_at: string
