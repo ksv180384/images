@@ -1,6 +1,7 @@
 <?php
 namespace App\Services\Category;
 
+use App\Http\Filters\CategoryImagesFilter;
 use App\Http\Filters\ImagesFilter;
 use App\Models\Category\ImageItem;
 use App\Services\FaceDetected\FaceDetectedService;
@@ -44,7 +45,7 @@ class ImageService extends Service
     public function getByCategoryId(int $categoryId): Collection
     {
 
-        $imagesFilter = new ImagesFilter(request());
+        $imagesFilter = new CategoryImagesFilter(request());
 
         $images = $this->model->filter($imagesFilter)->where('category_id', $categoryId)->get();
 

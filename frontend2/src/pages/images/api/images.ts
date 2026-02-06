@@ -1,12 +1,37 @@
 import { http } from '@/shared/api';
 
-import type { Image, ImageDTO } from '@/entities/image/model';
+import type { Image, ImageDTO, FilterParams } from '@/entities/image/model';
 import type { ImageTag, ImageTagDTO } from '@/entities/image-tag/model';
 
 
 
-export const getImagesList = async (categoryId: number): Promise<Array<Image>> => {
-  const list = await http.fetchGet<Array<ImageDTO>>(`category/${categoryId}/images`);
+export const getImagesList = async (categoryId: number, params?: FilterParams): Promise<Array<Image>> => {
+  const searchParams = new URLSearchParams();
+
+  if (params?.tags) {
+    searchParams.set('tags', params.tags);
+  }
+
+  if (params?.range && params.range.length === 2) {
+    const [from, to] = params.range as [string, string];
+    if (from) {
+      searchParams.set('range_from', from);
+    }
+    if (to) {
+      searchParams.set('range_to', to);
+    }
+  }
+
+  if (params?.no_date) {
+    searchParams.set('no_date', '1');
+  }
+
+  const queryString = searchParams.toString();
+  const url = queryString
+    ? `category/${categoryId}/images?${queryString}`
+    : `category/${categoryId}/images`;
+
+  const list = await http.fetchGet<Array<ImageDTO>>(url);
 
   return list.data !== null ? list.data.map(item => imageMapDTO(item)) : [];
 }
