@@ -67,7 +67,18 @@ class CategoryImagesFilter extends QueryFilter
      */
     public function rangeFrom(string $from)
     {
-        return $this->builder->where('image_created_at', '>=', $from);
+        $trimmed = trim($from);
+        if ($trimmed === '') {
+            return $this->builder;
+        }
+
+        try {
+            // Игнорируем день/время: устанавливаем начало месяца
+            $date = \Carbon\Carbon::parse($trimmed)->startOfMonth();
+        } catch (\Exception $e) {
+            // Некорректная дата — пропускаем фильтр (можно добавить логирование)
+            return $this->builder;
+        }
     }
 
     /**
@@ -78,7 +89,20 @@ class CategoryImagesFilter extends QueryFilter
      */
     public function rangeTo(string $to)
     {
-        return $this->builder->where('image_created_at', '<=', $to);
+        $trimmed = trim($to);
+        if ($trimmed === '') {
+            return $this->builder;
+        }
+
+        try {
+            // Игнорируем день/время: устанавливаем конец месяца (включая время 23:59:59.999999)
+            $date = \Carbon\Carbon::parse($trimmed)->endOfMonth();
+        } catch (\Exception $e) {
+            // Некорректная дата — пропускаем фильтр (можно добавить логирование)
+            return $this->builder;
+        }
+
+        return $this->builder->where('image_created_at', '<=', $date);
     }
 
     /**
