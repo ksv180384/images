@@ -11,7 +11,7 @@ export interface FilterCheckboxGroupContext {
 
 export interface FilterParams {
   tags: string | null;
-  range: [] | null;
+  range: [string, string] | null;
   no_date: boolean;
 }
 

@@ -55,7 +55,7 @@ const initFromQuery = (): void => {
 
   // Диапазон дат
   if (typeof range_from === 'string' && typeof range_to === 'string') {
-    filterParams.range = [range_from, range_to] as unknown as [];
+    filterParams.range = [range_from, range_to];
   }
 
   // Без даты
@@ -141,9 +141,9 @@ onMounted(async () => {
     </div>
   </div>
   <div class="h-[calc(90vh-60px)] overflow-auto">
-    <FilterImagesCheckboxGroup 
-      :key="JSON.stringify(checkTags)" 
-      v-model="checkTags" 
+    <FilterImagesCheckboxGroup
+      :key="JSON.stringify(checkTags)"
+      v-model="checkTags"
       @update:modelValue="filterTagsChange"
     >
       <template v-for="tag in tags" :key="tag.id">

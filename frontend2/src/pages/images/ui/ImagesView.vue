@@ -28,14 +28,14 @@ const buildFilterParamsFromRoute = (): FilterParams => {
   };
 
   if (typeof query.tags === 'string' && query.tags.trim() !== '') {
-    params.tags = query.tags.trim().split(',');
+    params.tags = query.tags.trim();
   }
 
   const from = typeof query.range_from === 'string' ? query.range_from : null;
   const to = typeof query.range_to === 'string' ? query.range_to : null;
 
   if (from && to) {
-    params.range = [from, to] as unknown as [];
+    params.range = [from, to];
   }
 
   if (query.no_date !== undefined) {

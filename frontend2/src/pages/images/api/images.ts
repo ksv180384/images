@@ -13,7 +13,7 @@ export const getImagesList = async (categoryId: number, params?: FilterParams): 
   }
 
   if (params?.range && params.range.length === 2) {
-    const [from, to] = params.range as [string, string];
+    const [from, to] = params.range;
     if (from) {
       searchParams.set('range_from', from);
     }
@@ -39,7 +39,7 @@ export const getImagesList = async (categoryId: number, params?: FilterParams): 
 export const getImageTagsList = async (): Promise<Array<ImageTag>> => {
   const list = await http.fetchGet<Array<ImageTagDTO>>(`image-tags/all`);
 
-  return list.data !== null ? list.data.map(item => imageMapDTO(item)) : [];
+  return list.data !== null ? list.data.map(item => imageTagMapDTO(item)) : [];
 }
 
 const imageTagMapDTO = (dto: ImageTagDTO): ImageTag => {

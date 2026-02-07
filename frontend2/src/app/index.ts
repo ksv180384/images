@@ -7,7 +7,7 @@ import App from '@/app/App.vue';
 import router from '@/app/router';
 import '@/app/styles/styles.css';
 import 'element-plus/dist/index.css';
-import ru from 'element-plus/dist/locale/ru.min.mjs';
+import ru from 'element-plus/es/locale/lang/ru';
 
 const app = createApp(App);
 

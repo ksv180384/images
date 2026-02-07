@@ -1,17 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { More } from '@element-plus/icons-vue';
-
-import type { Ref } from 'vue';
 import type { Image } from '@/entities/image/model';
+import { More } from '@element-plus/icons-vue';
 
 const props = defineProps<Image>();
 
-const isShowFace: Ref<boolean> = ref(true);
-
-const toggleFace = (): void => {
-  isShowFace.value = !isShowFace.value;
-}
 </script>
 
 <template>
@@ -22,7 +14,7 @@ const toggleFace = (): void => {
       :alt="title || ''"
     />
     <img
-      v-if="path_face && isShowFace"
+      v-if="path_face"
       :src="path_face"
       class="absolute rounded-full w-[60px] h-[60px] object-contain top-2 left-2 border-2 border-white"
       :alt="title ? `face ${title}` : 'face'"
@@ -31,7 +23,11 @@ const toggleFace = (): void => {
       <el-button :icon="More" circle></el-button>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item @click="toggleFace">Скрыть лицо</el-dropdown-item>
+          <el-dropdown-item>Прикрепить тэг</el-dropdown-item>
+          <el-dropdown-item>Показать похожие изображения</el-dropdown-item>
+          <el-dropdown-item>задать дату создания фото</el-dropdown-item>
+          <el-dropdown-item>Скрыть лицо</el-dropdown-item>
+          <el-dropdown-item>Удалить</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
