@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, nextTick } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { getImagesList, getImageTagsList } from '@/pages/images/api';
 
@@ -15,8 +15,33 @@ import type { FilterParams } from '@/entities/image/model';
 const route = useRoute();
 const router = useRouter();
 
+const refImagesContainer = ref();
 const images: Ref<Array<Image>> = ref([]);
 const imageTags: Ref<Array<ImageTag>> = ref([]);
+
+/** Реальная высота контейнера после отрисовки и загрузки всех картинок (scrollHeight) */
+const imagesContainerHeight: Ref<number> = ref(0);
+
+/**
+ * Возвращает высоту контейнера после отрисовки списка.
+ * С учётом lazy-картинок и width/height на img layout известен сразу после nextTick.
+ */
+const getContainerHeightAfterImagesLoad = (): Promise<number> => {
+  return new Promise((resolve) => {
+    nextTick(() => {
+      requestAnimationFrame(() => {
+        const container = refImagesContainer.value;
+        if (!container) {
+          resolve(0);
+          return;
+        }
+        const height = container.scrollHeight;
+        imagesContainerHeight.value = height;
+        resolve(height);
+      });
+    });
+  });
+};
 
 const buildFilterParamsFromRoute = (): FilterParams => {
   const query = route.query;
@@ -84,12 +109,15 @@ const filterChange = async (params: FilterParams) => {
   });
 
   await loadImages(params);
+  await getContainerHeightAfterImagesLoad();
 }
 
-onMounted(() => {
+onMounted(async () => {
   const initialParams = buildFilterParamsFromRoute();
-  loadImages(initialParams);
+  await loadImages(initialParams);
   loadImageTags();
+  const height = await getContainerHeightAfterImagesLoad();
+  console.log('Реальная высота контейнера после загрузки всех картинок:', height);
 });
 
 </script>
@@ -97,7 +125,7 @@ onMounted(() => {
 <template>
   <div class="flex flex-row">
     <!-- Grid Masonry layout -->
-    <div class="list flex-1">
+    <div ref="refImagesContainer" class="list flex-1">
       <template v-for="image in images" :key="image.id">
         <ImageCard
           v-bind="image"
